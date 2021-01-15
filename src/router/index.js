@@ -1,22 +1,27 @@
-import { createWebHistory, createRouter } from "vue-router";
-import SimpleTimer from "./../components/SimpleTimer.vue";
-import Countdown from "./../components/Countdown.vue";
-import NotFound from "./../components/NotFound.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from '../views/Home.vue'
+import About from '../views/About.vue'
+import Countdown from '../views/Countdown.vue'
+import NotFound from '../views/NotFound.vue'
+import SimpleTimer from '../views/SimpleTimer.vue'
 
 const routes = [
   {
-    path: "",
-    name: "Simple Timer",
-    component: SimpleTimer,
+    path: '/',
+    name: 'Home',
+    component: Home
   },
   {
-    path: "/",
-    name: "Simple Timer",
-    component: SimpleTimer,
+    path: '/about',
+    name: 'About',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: About
   },
   {
-    path: "/simple-timer",
-    name: "Simple Timer",
+    path: "/count-up",
+    name: "Count Up",
     component: SimpleTimer,
   },
   {
@@ -29,11 +34,11 @@ const routes = [
     name: "Error 404",
     component: NotFound,
   },
-];
+]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
 
-export default router;
+export default router

@@ -1,6 +1,6 @@
 <template>
-  <div id="page-wrapper" class="page-wrapper with-navbar with-sidebar with-navbar-fixed-bottom with-transitions"
-       data-sidebar-type="overlayed-sm-and-down">
+  <div id="page-wrapper" class="page-wrapper with-navbar with-sidebar with-navbar-fixed-bottom"
+       data-sidebar-type="overlayed-all">
 
     <!-- Sticky alerts -->
     <div class="sticky-alerts"></div>
@@ -12,14 +12,11 @@
           <i class="fa fa-bars" aria-hidden="true"></i>
         </button>
       </div>
-      <a href="#" class="navbar-brand ml-10 ml-sm-20">
-        <i class="fas fa-stopwatch"></i>&nbsp;<span class="d-none d-sm-flex">Timer App</span>
-      </a>
-      <div class="navbar-content ml-auto">
-        <router-link to="/login" class="btn btn-primary mr-5" role="button">Login</router-link>
-        <router-link to="/signup" class="btn btn-primary ml-5 mr-10" role="button">SignUp</router-link>
-
-        <button class="btn btn-action mr-5" type="button" onclick="halfmoon.toggleDarkMode()">
+      <router-link to="/" class="navbar-brand mx-auto">
+        <i class="fas fa-dice"></i>&nbsp;<span class="d-none d-sm-flex">Boardgame Tools</span>
+      </router-link>
+      <div class="navbar-content">
+        <button id="toggle-darkmode-btn" class="btn btn-action mr-5" type="button" onclick="halfmoon.toggleDarkMode()">
           <i class="fa fa-moon-o" aria-hidden="true"></i>
           <span class="sr-only">Toggle dark mode</span>
         </button>
@@ -31,18 +28,18 @@
     <div class="sidebar-overlay" onclick="halfmoon.toggleSidebar()"></div>
 
     <!-- Sidebar start -->
-    <div class="sidebar">
+    <div class="sidebar my-auto ml-15">
       <div class="sidebar-menu">
         <h5 class="sidebar-title">Timers</h5>
         <div class="sidebar-divider"></div>
 
-        <router-link to="/simple-timer" class="sidebar-link sidebar-link-with-icon">
-          <span class="sidebar-icon"><i class="fas fa-stopwatch"></i></span>
-          Simple Timer
+        <router-link to="/count-up" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
+          <span class="sidebar-icon">⏱️</span>
+          Count Up
         </router-link>
 
-        <router-link to="/countdown" class="sidebar-link sidebar-link-with-icon">
-          <span class="sidebar-icon"><i class="fas fa-hourglass-start"></i></span>
+        <router-link to="/countdown" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
+          <span class="sidebar-icon">⏳</span>
           Countdown
         </router-link>
 
@@ -50,7 +47,7 @@
         <h5 class="sidebar-title">Sheets and Tables</h5>
         <div class="sidebar-divider"></div>
 
-        <!-- <router-link to="/old-timers" class="sidebar-link sidebar-link-with-icon">
+        <!-- <router-link to="/old-timers" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
           <span class="sidebar-icon"><i class="fas fa-history"></i></span>
           Old Timers
         </router-link> -->
@@ -71,8 +68,8 @@
 
     <!-- Navbar fixed bottom start -->
     <nav class="navbar navbar-fixed-bottom">
-           <span class="navbar-text">
-                Made with&nbsp;<i class="fas fa-heart"></i>&nbsp;and&nbsp;<i class="fas fa-coffee"></i>&nbsp;by Fabian Brecht, Katja Kruse and Bernd Maier
+           <span class="navbar-text" style="display: inline">
+                Made with <i class="fas fa-heart"></i> and <i class="fas fa-coffee"></i> by <a href="https://twitter.com/FabianBrecht_">Fabian Brecht</a>
             </span>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
@@ -86,18 +83,36 @@
     <!-- Navbar fixed bottom end -->
 
   </div>
+  
 </template>
 
-<script>
-
-export default {
-  name: 'App',
-  components: {
-    
-  }
-}
-</script>
-
 <style>
+
+#freepik_stories-game-day {
+  margin-top: -15%;
+}
+
+#toggle-sidebar-btn, #toggle-darkmode-btn {
+  border-radius: 50%;
+  height: var(--navbar-action-button-width);
+}
+
+.navbar {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.navbar.navbar-fixed-bottom {
+  background-color: #212529;
+  color: #ffffff
+}
+
+.sidebar {
+  border-radius: 35px;
+  border-top: var(--sidebar-border-width) solid var(--lm-sidebar-border-color);
+  border-bottom: var(--sidebar-border-width) solid var(--lm-sidebar-border-color);
+  -webkit-box-shadow: 6px 0px 35px 5px rgba(74,74,74,0.41); 
+  box-shadow: 6px 0px 35px 5px rgba(74,74,74,0.41);
+}
 
 </style>
