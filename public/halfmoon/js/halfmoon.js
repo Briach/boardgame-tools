@@ -237,7 +237,6 @@ var halfmoon = {
     keydownHandler: function(event) {},
 }
 
-
 /* Things done once the DOM is loaded */
 
 function halfmoonOnDOMContentLoaded() {

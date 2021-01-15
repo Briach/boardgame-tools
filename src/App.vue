@@ -1,4 +1,5 @@
 <template>
+
   <div id="page-wrapper" class="page-wrapper with-navbar with-sidebar with-navbar-fixed-bottom"
        data-sidebar-type="overlayed-all">
 
@@ -30,27 +31,33 @@
     <!-- Sidebar start -->
     <div class="sidebar my-auto ml-15">
       <div class="sidebar-menu">
+        <h5 class="sidebar-title">Sheets and Tables</h5>
+        <div class="sidebar-divider"></div>
+
+        <router-link to="/sheets/countpoints" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
+          <span class="sidebar-icon">📝</span>
+          Count Points
+        </router-link>
+
+        <router-link to="/sheets/countwins" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
+          <span class="sidebar-icon">📄</span>
+          Count Wins
+        </router-link>
+
+        <br>
+
         <h5 class="sidebar-title">Timers</h5>
         <div class="sidebar-divider"></div>
 
-        <router-link to="/count-up" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
+        <router-link to="/timers/count-up" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
           <span class="sidebar-icon">⏱️</span>
           Count Up
         </router-link>
 
-        <router-link to="/countdown" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
+        <router-link to="/timers/countdown" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
           <span class="sidebar-icon">⏳</span>
           Countdown
         </router-link>
-
-        <br>
-        <h5 class="sidebar-title">Sheets and Tables</h5>
-        <div class="sidebar-divider"></div>
-
-        <!-- <router-link to="/old-timers" class="sidebar-link sidebar-link-with-icon" onclick="halfmoon.toggleSidebar()">
-          <span class="sidebar-icon"><i class="fas fa-history"></i></span>
-          Old Timers
-        </router-link> -->
 
       </div>
     </div>
@@ -58,11 +65,9 @@
 
     <!-- Content wrapper start -->
     <div class="content-wrapper d-flex" wfd-id="4">
-      <div class="container-fluid my-auto" wfd-id="5">
 
-         <router-view />
+        <router-view />
 
-      </div>
     </div>
     <!-- Content wrapper end -->
 
@@ -85,6 +90,10 @@
   </div>
   
 </template>
+
+<script>
+
+</script>
 
 <style>
 

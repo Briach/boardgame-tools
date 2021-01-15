@@ -1,9 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-import Countdown from '../views/Countdown.vue'
 import NotFound from '../views/NotFound.vue'
-import SimpleTimer from '../views/SimpleTimer.vue'
+
+import Countdown from '../views/timers/Countdown.vue'
+import SimpleTimer from '../views/timers/SimpleTimer.vue'
+
+import CountPoints from '../views/sheets/CountPoints.vue'
+import CountWins from '../views/sheets/CountWins.vue'
+
 
 const routes = [
   {
@@ -20,20 +25,33 @@ const routes = [
     component: About
   },
   {
-    path: "/count-up",
-    name: "Count Up",
-    component: SimpleTimer,
-  },
-  {
-    path: "/countdown",
-    name: "Countdown",
-    component: Countdown,
-  },
-  {
     path: "/:catchAll(.*)",
     name: "Error 404",
     component: NotFound,
   },
+
+  {
+    path: "/timers/count-up",
+    name: "Count Up",
+    component: SimpleTimer,
+  },
+  {
+    path: "/timers/countdown",
+    name: "Countdown",
+    component: Countdown,
+  },
+
+  {
+    path: "/sheets/countpoints",
+    name: "Count Points",
+    component: CountPoints,
+  },
+  {
+    path: "/sheets/countwins",
+    name: "Count Wins",
+    component: CountWins,
+  },
+ 
 ]
 
 const router = createRouter({

@@ -1,4 +1,6 @@
 <template>
+
+  <div class="container-fluid" wfd-id="5">
   
     <div class="row mx-20 mb-20 justify-content-center">
       <div class="col col-md-8 col-lg-6">
@@ -7,6 +9,8 @@
          <small class="text-center"><a href="https://stories.freepik.com/people">Illustration by Freepik Stories</a></small>
        </div>
     </div>
+  </div>
+  
   </div>
 
 </template>

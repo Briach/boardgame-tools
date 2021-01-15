@@ -1,56 +1,34 @@
 <template>
 
+  <div class="container-fluid my-auto" wfd-id="5">  
+
   <div class="row mb-5 justify-content-center">
     <div class="col-11 col-sm-10 col-lg-6 text-center">
-      <h2>Countdown</h2>
+      <h2>Count Up</h2>
     </div>
   </div>
   <div class="row mb-10 justify-content-center">
     <div id="timer" class="col-11 col-sm-10 col-lg-6 justify-content-center mb-5">
-      <div class="base-timer">
-        <svg class="svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <g class="circle">
-            <path
-              :stroke-dasharray="circleDasharray"
-              class="path-remaining"
-              d="
-                M 50, 50
-                m -45, 0
-                a 45,45 0 1,0 90,0
-                a 45,45 0 1,0 -90,0
-              "></path>
-          </g>
-        </svg>
-        <span class="label">
-          {{ getFormattedTimer }}
-        </span>
+      <div class="row justify-content-center">
+            <span class="timer-text text-center col-sm-10 col-lg-8">
+            {{ getFormattedTimer }}
+            </span>
       </div>
     </div>
   </div>
 
-  <div class="row mt-10 justify-content-center">
-    <form class="w-auto w-sm-half w-lg-quarter" onsubmit="return false;">
-      <div class="form-row row-eq-spacing-sm">
-        <div class="col-sm">
-          <label for="timeIntervall" class="required">Intervall</label>
-          <input type="number" class="form-control" id="timeIntervall" placeholder="10" required="required" v-model="timeIntervall">
-          <div class="form-text">
-            The number of minutes to count down. You can change this while the Countdown runs, it will keep the time it already counted.
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <div class="row justify-content-center">
+  <div class="row m-10 mb-20 justify-content-center">
     <button class="btn btn-primary mx-20 my-20" v-if="!isCounterActive" v-on:click="startTimer()">Start</button>
     <button class="btn btn-primary mx-20 my-20" v-if="isCounterActive" v-on:click="pauseTimer()">Pause</button>
     <button class="btn btn-secondary mx-20 my-20" v-on:click="resetTimer()">Reset</button>
   </div>
 
+  </div>
+
 </template>
 
 <script>
+
 export default {
   name: 'SimpleTimer',
   props: {},
@@ -60,71 +38,102 @@ export default {
       isCounterActive: false,
       isTimerCreated: false,
       timerName: "",
-      timeIntervall: 10,
+      interval: undefined,
+      startTime: "",
+      stopTime: "",
       stickyAlerts: document.getElementsByClassName("sticky-alerts")[0]
     }
   },
 
   computed: {
-    timeLimit: function() {
-      return this.timeIntervall * 60
-    },
-    timeLeft: function() {
-      return this.timeLimit - this.counter;
-    },
     getFormattedTimer: function () {
-      var time = 0;
-      if (this.counter >= this.timeLimit) { time = this.counter - this.timeLimit }
-      else { time = this.timeLimit - this.counter; }
+      var hours = (Math.floor(this.counter / 60)).toString();
+      var minutes = (this.counter % 60).toString();
 
-      var hours = (Math.floor(time / 60)).toString();
-      var minutes = (time % 60).toString();
-      
       if (hours.length < 2) {
         hours = "0" + hours;
       }
       if (minutes.length < 2) {
         minutes = "0" + minutes;
       }
-
-      var formatted = hours + ":" + minutes;
-      if (this.counter >= this.timeLimit) {
-        formatted = "-" + formatted;
-      }
-
-      return formatted;
+      return hours + ":" + minutes;
     },
     now: function () {
       return Date.now()
-    },
-    // Update the dasharray value as time passes, starting with 283
-    circleDasharray() {
-      if (this.counter >= this.timeLimit) {
-        return "0 283";
-      }
-      else {
-        return `${(this.timeFraction * 283).toFixed(0)} 283`;
-      }
-    },
-    timeFraction() {
-      const rawTimeFraction = this.timeLeft / this.timeLimit;
-      return rawTimeFraction - (1 / this.timeLimit) * (1 - rawTimeFraction);
-    },
+    }
   },
   methods: {
+
+    renameTimer: function () {
+      var input = document.getElementById('timerName');
+
+      if (input.value !== "") {
+        this.timerName = input.value;
+        this.user_name = 'testUser';
+        this.password = 'testPassword';
+        this.isTimerCreated = true;
+        fetch('http://localhost:3000/api/v1/timers', {
+          method: 'post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          // TODO: Ruf die ID vom angemeldeten User ab und übergib sie dem body
+          body: JSON.stringify({"timerName": this.timerName, "user_name": this.user_name, "password": this.password})
+          }).then(res => res.json())
+            .then(res => this.id = (res.id))
+            .then(res => console.log(res));
+
+        this.initStickyAlert({
+          content: "Timer <b>" + this.timerName + "</b> was created!",      
+          title: "Timer Created",     
+          alertType: "",             
+          fillType: "",               
+          hasDismissButton: true,     
+          timeShown: 3000             
+        })
+      } 
+      else {
+        this.initStickyAlert({
+          content: "Timer name can't be empty",      
+          title: "Error",     
+          alertType: "alert-danger",             
+          fillType: "",               
+          hasDismissButton: true,     
+          timeShown: 3000             
+        })
+      }
+    },
+    // This method makes a GET request to the '/timers' endpoint and lists all of them out of the database
+    showTimersAll: function () {
+      fetch('http://localhost:3000/api/v1/timers', {
+        method: 'get',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        }).then(res => res.json())
+          .then(res => console.log(res))
+    },
     startTimer: function () {
       this.isCounterActive = true;
-
+      //TODO: Welches Format/Codierung eignet sich hier am besten?
+      this.startTime = Date();
       this.interval = setInterval(() => {
-        if (this.counter == this.timeLimit) {
-          var sound = new Audio();
-          // source: http://soundbible.com/1252-Bleep.html
-          sound.src = "../assets/audio/bleep.wav";
-          sound.load();
-          sound.play();
-        }
         this.counter++;
       }, 1000)
+
+      // TODO: Hole die aktuelle timer ID und häng sie der URL an, damit auch der richtige Timer gestartet wird
+      fetch('http://localhost:3000/api/v1/timers/111', {
+        method: 'put',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // TODO: Ruf die ID vom angemeldeten User ab und übergib sie dem body
+        body: JSON.stringify({"startTime": this.startTime})
+        }).then(res => res.json())
+          .then(res => console.log(res));
 
       this.initStickyAlert({
         content: "Timer <b>" + this.timerName + "</b> was started!",      
@@ -132,28 +141,37 @@ export default {
         alertType: "",             
         fillType: "",               
         hasDismissButton: true,     
-        timeShown: 5000             
+        timeShown: 3000             
       })
     },
 
     pauseTimer: function () {
       this.isCounterActive = false;
       clearInterval(this.interval);
+      this.stopTime = Date();
+      fetch('http://localhost:3000/api/v1/timers/111', {
+        method: 'put',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"stopTime": this.stopTime})
+        }).then(res => res.json())
+          .then(res => console.log(res))
 
       this.initStickyAlert({
-        content: "Countdown was paused!",      
+        content: "Timer <b>" + this.timerName + "</b> was paused!",      
         title: "Timer Paused",     
         alertType: "",             
         fillType: "",               
         hasDismissButton: true,     
-        timeShown: 5000             
+        timeShown: 3000             
       })
     },
-
     resetTimer: function () {
       this.counter = 0;
+      // POST localhost:3000/<user>/simpleTimer/reset/<currentTime>
     },
-
     makeId: function(length) {
         var result = "";
         var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -163,7 +181,6 @@ export default {
         }
         return result;
     },
-
     toastAlert: function(alertId, timeShown) {
         var alertElement = document.getElementById(alertId);
 
@@ -202,7 +219,6 @@ export default {
             }, timeToDestroy);
         }
     },
-
     initStickyAlert: function(param) {
         // Setting the variables from the param
         var content = ("content" in param) ? param.content: "";
@@ -255,66 +271,27 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-/* Sets the containers height and width */
-.base-timer {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  margin-left: auto;
-  margin-right: auto;
+#timer {
+  padding-top: 5%;
+  padding-bottom: 5%;
+  border: 1px solid var(--lm-border-color);
+  border-radius: 25px;
 }
 
-.base-timer .svg {
-  /* Flips the svg and makes the animation to move left-to-right */
-  transform: scaleX(-1);
+body.dark-mode #timer {
+  border: 1px solid var(--dm-border-color);
 }
 
-/* Removes SVG styling that would hide the time label */
-.base-timer .circle {
-  fill: none;
-  stroke: none;
+.timer-text {
+  font-size: 400%;
+  font-family: 'Major Mono Display', monospace;
 }
 
-/* The SVG path that displays the timer's progress */
-.base-timer .path-elapsed {
-  stroke-width: 7px;
-  stroke:grey;
-}
-
-.base-timer .path-remaining {
-  /* Just as thick as the original ring */
-  stroke-width: 7px;
-  /* Rounds the line endings to create a seamless circle */
-  stroke-linecap: round;
-  /* Makes sure the animation starts at the top of the circle */
-  transform: rotate(90deg);
-  transform-origin: center;
-  /* One second aligns with the speed of the countdown timer */
-  transition: 1s linear all;
-  /* Allows the ring to change color when the color value updates */
-  stroke: var(--primary-color);
-}
-.dark mode .base-timer .path-remaining {
-  stroke: var(--primary-color);
-}
-
-.base-timer .label {
-  position: absolute;    
-
-  /* Size should match the parent container */    
-  width: 300px;
-  height: 300px;
-
-  /* Keep the label aligned to the top */    
-  top: 0;
-
-  /* Create a flexible box that centers content vertically and horizontally */    
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* Sort of an arbitrary number; adjust to your liking */
-  font-size: 48px;
+@media (min-width: 700px) {
+  .timer-text {
+    font-size: 600%;
+    font-family: 'Major Mono Display', monospace;
+  }
 }
 
 </style>
