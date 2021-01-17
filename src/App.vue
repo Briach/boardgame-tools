@@ -1,5 +1,7 @@
 <template>
 
+  <cookie-consent></cookie-consent>
+
   <div id="page-wrapper" class="page-wrapper with-navbar with-sidebar with-navbar-fixed-bottom"
        data-sidebar-type="overlayed-all">
 
@@ -78,7 +80,7 @@
             </span>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="#" class="nav-link" style="color:#ffffff">
             <i class="fa fa-question-circle-o mr-5" aria-hidden="true"></i>
             About
           </a>
@@ -92,6 +94,20 @@
 </template>
 
 <script>
+import halfmoon from 'halfmoon';
+import CookieConsent from './components/CookieConsent.vue';
+
+export default {
+  components: {
+    CookieConsent
+  },
+  mounted() {
+    halfmoon.toggleModal("modal-cookie-consent");
+  },
+  methods: {
+    
+  }
+}
 
 </script>
 

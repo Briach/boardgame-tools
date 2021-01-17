@@ -55,7 +55,10 @@ import halfmoon from 'halfmoon';
 import AddPlayers from './../../components/AddPlayers.vue';
 
 export default {
-     components: { AddPlayers },
+    components: { AddPlayers },
+    props: {
+        cookieConsent: false,
+    },
     data() {
         return {
             rounds: [1],
